@@ -10,5 +10,8 @@ qmake .
 make -j$(nproc)
 cp nothesia /usr/local/bin
 
+# Usage
+Use qjackctl to connect the keyboard to the program. Set the range of your piano in main.cpp (That should and might be changed at some point)
+
 # Licence
 Lets go with GPL3
