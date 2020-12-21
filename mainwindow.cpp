@@ -1,7 +1,7 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QDebug>
-#define RATE 5
+#define RATE this->height()/3000
 
 MainWindow::MainWindow(int minOctave, int maxOctave)
     : QOpenGLWindow(NoPartialUpdate)
@@ -75,7 +75,7 @@ void MainWindow::paintGL()
 
             else
             {
-                quint32 height=(now-duration)/RATE;
+                quint32 height=(now-duration)*RATE;
                 QRectF note=QRectF(QPointF(it.value().left(),it.value().top()),QPointF(it.value().right(),it.value().top()-height));
                 painter.fillRect(it.value(),note_map.pressed_color);
                 painter.drawRect(it.value());
@@ -85,8 +85,8 @@ void MainWindow::paintGL()
 
             for(QVector<Duration>::iterator jt=played_notes[it.key()].begin(); jt!=played_notes[it.key()].end(); jt++)
             {
-                quint32 h1=(now-jt->begin)/RATE;
-                quint32 h2=(now-jt->end)/RATE;
+                quint32 h1=(now-jt->begin)*RATE;
+                quint32 h2=(now-jt->end)*RATE;
                 QRectF note=QRectF(QPointF(it.value().left(),it.value().top()-h2),QPointF(it.value().right(),it.value().top()-h1));
                 painter.fillRect(note,note_map.trail_color);
                 painter.drawRect(note);
@@ -112,18 +112,16 @@ void MainWindow::prepare_notemaps()
 
         switch(n%12)
         {
-            case 0:
-            case 2:
-            case 4:
-            case 5:
-            case 7:
-            case 9:
-            case 11:
-                white_note_map[n]=QRectF(tl,y,w_note_width,w_note_height);
-                tl+=w_note_width;
+            case 1:
+            case 3:
+            case 6:
+            case 8:
+            case 10:
+                black_note_map[n]=QRectF(tl-b_note_offset,y,b_note_width,b_note_height);
                 break;
             default:
-                black_note_map[n]=QRectF(tl-b_note_offset,y,b_note_width,b_note_height);
+                white_note_map[n]=QRectF(tl,y,w_note_width,w_note_height);
+                tl+=w_note_width;
                 break;
         }
     }
