@@ -143,26 +143,23 @@ void MainWindow::cleanup_notes()
 void MainWindow::midiCallback(double deltatime, std::vector<unsigned char> *message, void *userData)
 {
     MainWindow *self=(MainWindow*)userData;
+    qint64 begin,end;
 
     switch(message->at(0)>>4)
     {
         case NOTEOFF:
         noteoff:
-        {
-            qint64 begin = self->playing_notes[message->at(1)];
-            qint64 end = QDateTime::currentMSecsSinceEpoch();
+            begin=self->playing_notes[message->at(1)];
+            end=QDateTime::currentMSecsSinceEpoch();
             self->played_notes[message->at(1)].append({begin,end});
             if(self->played_notes[message->at(1)].length()>32) self->played_notes[message->at(1)].removeAt(0);
             self->playing_notes[message->at(1)]=0;
             break;
-        }
 
         case NOTEON:
-        {
             if(message->at(2) == 0) goto noteoff;
             self->playing_notes[message->at(1)]=QDateTime::currentMSecsSinceEpoch();
             break;
-        }
 
         default:
             break;
