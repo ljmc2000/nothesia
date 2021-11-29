@@ -3,12 +3,13 @@ This project is designed to provide visual feedback from a midi piano. The inten
 
 # Building
 Target platform is linux. The code may need to be reworked for windows use. librtmidi and qt are required to build.
-* debian: sudo apt install librtmidi-dev qt5-qmake
-* arch: sudo pacman -S qt5-base rtmidi
-
+```
+(debian) sudo apt install librtmidi-dev qt5-qmake
+(arch) sudo pacman -S qt5-base rtmidi
 qmake .
 make -j$(nproc)
-cp nothesia /usr/local/bin
+sudo cp nothesia /usr/local/bin
+```
 
 # Usage
 Use qjackctl to connect the keyboard to the program. Set the range of your piano in main.cpp (That should and might be changed at some point)
