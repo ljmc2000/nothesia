@@ -59,6 +59,7 @@ private:
     QHash<quint8,QVector<Duration>> played_notes;
     QPainter painter;
     QTimer frameRedrawTimer,noteCleanupTimer;
+	QColor background_color;
 
     int minOctave,maxOctave;
 };

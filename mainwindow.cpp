@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QProcessEnvironment>
 #include <QDebug>
 #define RATE this->height()/3000
 
@@ -40,13 +41,17 @@ MainWindow::~MainWindow()
 
 void MainWindow::init_colors()
 {
-    black_note_map.nuetral_color=Qt::black;
-    black_note_map.pressed_color=QColor(50,50,50);
-    black_note_map.trail_color=Qt::red;
+	QProcessEnvironment env = QProcessEnvironment::systemEnvironment();
+	QString bgcolor = env.value("NOTHESIA_BACKGROUND_COLOR");
+	background_color=bgcolor.length()==0?QPalette::Window:QColor(bgcolor);
 
-    white_note_map.nuetral_color=Qt::white;
-    white_note_map.pressed_color=Qt::gray;
-    white_note_map.trail_color=Qt::green;
+	black_note_map.nuetral_color=QColor(env.value("NOTHESIA_BLACK_NOTE_NEUTRAL_COLOR","black"));
+	black_note_map.pressed_color=QColor(env.value("NOTHESIA_BLACK_NOTE_PRESSED_COLOR","#323232"));
+	black_note_map.trail_color=QColor(env.value("NOTHESIA_BLACK_NOTE_TRAIL_COLOR","red"));
+
+	white_note_map.nuetral_color=QColor(env.value("NOTHESIA_WHITE_NOTE_NEUTRAL_COLOR","white"));
+	white_note_map.pressed_color=QColor(env.value("NOTHESIA_WHITE_NOTE_PRESSED_COLOR","gray"));
+	white_note_map.trail_color=QColor(env.value("NOTHESIA_WHITE_NOTE_TRAIL_COLOR","lime"));
 }
 
 void MainWindow::resizeGL(int width, int height)
@@ -60,7 +65,7 @@ void MainWindow::paintGL()
     qint64 now = QDateTime::currentMSecsSinceEpoch();
     painter.begin(this);
     painter.setPen(Qt::black);
-    painter.fillRect(0,0,width(),height(),QPalette::Window);
+	painter.fillRect(0,0,width(),height(),background_color);
 
     for(NoteMap note_map: {white_note_map,black_note_map})
     {
