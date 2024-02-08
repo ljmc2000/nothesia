@@ -48,6 +48,7 @@ private slots:
 
 private: //methods
     static void midiCallback(double deltatime, std::vector< unsigned char > *message, void *userData);
+    int count_white_notes();
     void prepare_notemaps();
     void init_colors();
 

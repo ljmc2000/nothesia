@@ -101,9 +101,30 @@ void MainWindow::paintGL()
     painter.end();
 }
 
+int MainWindow::count_white_notes()
+{
+    int count=0;
+    for(quint8 n=12*minOctave; n<=12*maxOctave; n++)
+    {
+        switch(n%12)
+        {
+            case 1:
+            case 3:
+            case 6:
+            case 8:
+            case 10:
+                break;
+            default:
+                count++;
+        }
+    }
+
+    return count;
+}
+
 void MainWindow::prepare_notemaps()
 {
-    float w_note_width=this->width()/(7*(maxOctave-minOctave));
+    float w_note_width=this->width()/(float)count_white_notes();
     float w_note_height=w_note_width*5;
     float b_note_width=w_note_width*.75;
     float b_note_height=b_note_width*4;
